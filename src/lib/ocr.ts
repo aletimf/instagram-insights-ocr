@@ -27,7 +27,30 @@ export async function processImageOCR(imageBuffer: Buffer): Promise<OCRMetrics> 
             content: [
               {
                 type: 'text',
-                text: `Analyze this Instagram Stories insights screenshot and extract the following numerical metrics: impressions, reach, profile visits, website clicks, link clicks, follows, shares, replies, story exits, story completion rate, forward taps, back taps, next story taps, and sticker taps.
+                text: `Analyze this Instagram Stories insights screenshot and extract the following numerical metrics: impressions, reach, profile visits, website clicks, link clicks, follows, shares, replies, likes, story exits, story completion rate, forward taps, back taps, next story taps, and sticker taps.
+
+IMPORTANT METRIC VARIATIONS TO RECOGNIZE:
+- "Reach" can also appear as "Viewers" (unique people who viewed the story)
+- "Views" refers to total story views (can be higher than reach due to multiple views)
+- "Likes" is distinct from "Interactions" (which is a broader category)
+- "Impressions" may also appear as total view count in some layouts
+
+MAPPING RULES:
+- If you see "Viewers": map this to "reach"
+- If you see "Views": map this to "views" (not reach)
+- If you see "Reach": map this to "reach"
+- If you see "Likes": map this to "likes"
+- If you see "Interactions": map this to "interactions"
+
+Look carefully for these specific labels in the screenshot:
+- "Viewers" → should be mapped to "reach"
+- "Views" → should be mapped to "views"
+- "Reach" → should be mapped to "reach"
+- "Likes" (distinct from "Interactions")
+- "Replies" 
+- "Shares"
+- "Link clicks"
+- "Sticker taps"
 
 Please return ONLY a valid JSON object with metric names as keys and their numerical values as numbers. 
 If a metric is not visible or unclear, omit it from the response.
@@ -35,13 +58,16 @@ If a metric is not visible or unclear, omit it from the response.
 Example format:
 {
   "impressions": 1234,
-  "reach": 987,
+  "views": 442,
+  "reach": 425,
   "profile_visits": 56,
   "website_clicks": 8,
   "link_clicks": 15,
   "follows": 12,
   "shares": 5,
   "replies": 45,
+  "likes": 16,
+  "interactions": 29,
   "story_exits": 3,
   "story_completion_rate": 87,
   "forward_taps": 20,
